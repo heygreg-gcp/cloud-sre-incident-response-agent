@@ -1,0 +1,41 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "cloud-sre-incident-response-agent"
+version = "1.0.0"
+description = "Enterprise Cloud Reliability & Incident Response Multi-Agent System built with Google Agent Development Kit (ADK)"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.11"
+authors = [
+    { name = "heygreg-gcp", email = "heygreg-gcp@users.noreply.github.com" }
+]
+dependencies = [
+    "google-adk>=1.0.0",
+    "google-genai>=1.0.0",
+    "pydantic>=2.7.0",
+    "opentelemetry-api>=1.25.0",
+    "opentelemetry-sdk>=1.25.0",
+    "google-cloud-dlp>=3.18.0",
+    "google-cloud-secret-manager>=2.20.0",
+    "google-cloud-discoveryengine>=0.12.0",
+    "google-cloud-logging>=3.10.0",
+    "python-json-logger>=2.0.7",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=5.0.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["sre_agent"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["."]
