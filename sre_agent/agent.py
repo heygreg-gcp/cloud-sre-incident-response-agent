@@ -21,6 +21,7 @@ from sre_agent.guardrails import (
     SelfCritiqueEvaluator,
     after_model_guardrail_callback,
     before_model_guardrail_callback,
+    before_tool_guardrail_callback,
 )
 from sre_agent.memory import (
     AsyncMemoryConsolidator,
@@ -96,6 +97,9 @@ def build_remediation_executor_agent() -> LlmAgent:
         ),
         instruction=REMEDIATION_EXECUTOR_PROMPT,
         tools=[create_critical_incident_ticket, execute_production_rollback],
+        before_model_callback=before_model_guardrail_callback,
+        after_model_callback=after_model_guardrail_callback,
+        before_tool_callback=before_tool_guardrail_callback,
         output_key="remediation_execution_result",
     )
 
@@ -128,6 +132,9 @@ def build_root_agent() -> LlmAgent:
         ),
         instruction=COORDINATOR_CONSTITUTION_PROMPT,
         sub_agents=[build_incident_response_pipeline()],
+        before_model_callback=before_model_guardrail_callback,
+        after_model_callback=after_model_guardrail_callback,
+        before_tool_callback=before_tool_guardrail_callback,
         output_schema=IncidentAssessmentReport,
     )
 

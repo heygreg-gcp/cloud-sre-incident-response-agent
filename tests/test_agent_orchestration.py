@@ -75,6 +75,7 @@ def test_adk_multi_agent_hierarchy_and_subagents_are_properly_configured() -> No
 
     assert isinstance(remediation_executor_agent, LlmAgent)
     assert remediation_executor_agent.model == "gemini-2.5-pro"
+    assert remediation_executor_agent.before_tool_callback is not None
 
     assert isinstance(incident_response_pipeline, SequentialAgent)
     assert len(incident_response_pipeline.sub_agents) == 3
@@ -82,6 +83,9 @@ def test_adk_multi_agent_hierarchy_and_subagents_are_properly_configured() -> No
     assert isinstance(root_agent, LlmAgent)
     assert root_agent.name == "sre_incident_response_coordinator"
     assert len(root_agent.sub_agents) >= 1
+    assert root_agent.before_model_callback is not None
+    assert root_agent.after_model_callback is not None
+    assert root_agent.before_tool_callback is not None
 
     fresh_pipeline = build_incident_response_pipeline()
     fresh_root = build_root_agent()
