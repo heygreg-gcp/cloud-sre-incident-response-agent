@@ -249,6 +249,9 @@ class IncidentResponseOrchestrator:
             dominant_sig = (
                 top_Clusters[0]["signature"] if top_Clusters else "AnomalousErrorSignature"
             )
+            dominant_sample = (
+                top_Clusters[0]["sample_message"] if top_Clusters else ""
+            )
 
             # Step 5: Sub-Agent 2 — RootCauseAnalystAgent (gemini-2.5-pro)
             with DEFAULT_TRACING.start_span(
@@ -260,7 +263,9 @@ class IncidentResponseOrchestrator:
                     lookback_hours=6,
                     session_id=session_id,
                 )
-                runbook_query = f"{service_name} {dominant_sig} 5xx error spike deployment rollback"
+                runbook_query = (
+                    f"{service_name} {dominant_sig} {dominant_sample} {sanitized_prompt}"
+                )
                 runbooks = search_incident_runbooks(
                     query=runbook_query,
                     top_k=2,
